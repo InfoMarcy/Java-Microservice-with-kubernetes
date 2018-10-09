@@ -1,3 +1,6 @@
+##################################################################################################
+# Mongo service
+##################################################################################################
 apiVersion: v1
 kind: Service
 metadata:
@@ -10,7 +13,9 @@ spec:
       targetPort: 27017
   selector:
     name: mongo
----
+##################################################################################################
+# Mongo Deployment controller
+##################################################################################################
 apiVersion: v1
 kind: ReplicationController
 metadata:
@@ -38,7 +43,9 @@ spec:
         - name: mongo-persistent-storage
           hostPath:
                 path: /data/storage/mongodb
----
+##################################################################################################
+# Java App Deployment - Hr Core usuarios
+##################################################################################################
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -60,7 +67,9 @@ spec:
         env:
             - name: MONGO_URI
               value: mongo-service
----
+##################################################################################################
+# Java App Service - Hr Core Usuarios
+##################################################################################################
 apiVersion: v1
 kind: Service
 metadata:
@@ -77,7 +86,9 @@ spec:
   selector:
     app: hr-core-service
     
----
+##################################################################################################
+# Java App Deployment . Hr Accounts
+##################################################################################################
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -99,7 +110,9 @@ spec:
         env:
             - name: MONGO_URI
               value: mongo-service
----
+##################################################################################################
+# Java App Service - Hr Accounts
+##################################################################################################
 apiVersion: v1
 kind: Service
 metadata:
@@ -115,12 +128,3 @@ spec:
       nodePort: 31002
   selector:
     app: hr-account-service
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: hr-java-app-ingress
-spec:
-  backend:
-    serviceName: hr-core-service
-    servicePort: 8080
